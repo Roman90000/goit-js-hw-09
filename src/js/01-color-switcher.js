@@ -8,13 +8,14 @@ function BtnClickStart() {
     id = setInterval(() => {
         document.body.style.backgroundColor = getRandomHexColor();
         startBtn.disabled = true;
-        console.log(startBtn)
+        stopBtn.disabled = false;
     }, 1000);
 };
 
 function BtnClickStop() {
     clearInterval(id);
     startBtn.disabled = false;
+    stopBtn.disabled = true;
 }
 
 
