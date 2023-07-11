@@ -5,39 +5,35 @@ require("flatpickr/dist/themes/confetti.css");
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
-// const inputEl = document.querySelector("#datetime-picker")
 const btnStartEl = document.querySelector("[data-start]");
 const timerDays = document.querySelector("[data-days]");
 const timetHours = document.querySelector("[data-hours]");
 const timerMinutes = document.querySelector("[data-minutes]");
 const timerSeconds = document.querySelector("[data-seconds]");
 
-// btnStartEl.disabled = true;
-
 btnStartEl.addEventListener("click", timerStart);
 
-
-// console.log()
+btnStartEl.disabled = true;
 const fp = flatpickr("#datetime-picker", {
     enableTime: true,
     time_24hr: true,
+    minDate: "today",
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
         
-        currentDate = new Date();
-        console.log(currentDate)
+        const currentDate = new Date();
+        const selectedDate = fp.selectedDates[0];
         
-        if (selectedDates[0] - currentDate > 0) {
+        if (currentDate < selectedDate) {
             btnStartEl.disabled = false;
+            
         } else {
-            btnStartEl.disabled = true;
             Notify.failure('Please choose a date in the future')
+            btnStartEl.disabled = true;
         }
     }   
 });
-
-
 
 function timerStart() {
     const selectedDate = fp.selectedDates[0];
@@ -47,12 +43,12 @@ function timerStart() {
         const countdown = selectedDate - currentDate;
         btnStartEl.disabled = true;
 
-        if (countdown < 0) {
+        if (!countdown) {
         clearInterval(timerId);
         return;
         }
     updateTimer(convertMs(countdown));
-  }, 1_000);
+}, 1000);
 };
 
 function updateTimer({ days, hours, minutes, seconds }) {
@@ -60,9 +56,7 @@ function updateTimer({ days, hours, minutes, seconds }) {
     timetHours.textContent = `${hours}`;
     timerMinutes.textContent = `${minutes}`;
     timerSeconds.textContent = `${seconds}`;
-}
-
-
+};
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
