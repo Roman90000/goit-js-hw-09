@@ -35,6 +35,8 @@ const fp = flatpickr("#datetime-picker", {
     }   
 });
 
+let timerId = null;
+
 function timerStart() {
     const selectedDate = fp.selectedDates[0];
 
